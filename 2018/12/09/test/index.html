@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Umbrella Helm Chart在Uber chart中, values的覆盖">
+<meta name="description" content="Umbrella Helm Chart在Uber chart中, values的覆盖 Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances">
 <meta name="keywords" content="Helm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Uber Chart">
 <meta property="og:url" content="http://yoursite.com/2018/12/09/test/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Umbrella Helm Chart在Uber chart中, values的覆盖">
+<meta property="og:description" content="Umbrella Helm Chart在Uber chart中, values的覆盖 Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-09T20:18:39.000Z">
+<meta property="og:updated_time" content="2018-12-09T20:40:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Uber Chart">
-<meta name="twitter:description" content="Umbrella Helm Chart在Uber chart中, values的覆盖">
+<meta name="twitter:description" content="Umbrella Helm Chart在Uber chart中, values的覆盖 Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances">
 
 
 
@@ -301,6 +301,11 @@
 
       
         <h3 id="Umbrella-Helm-Chart"><a href="#Umbrella-Helm-Chart" class="headerlink" title="Umbrella Helm Chart"></a>Umbrella Helm Chart</h3><p>在Uber chart中, values的覆盖</p>
+<p>Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances of large-scale applications. In such cases, a single umbrella chart may have multiple subcharts, each of which functions as piece of the whole.</p>
+<p>The current best practice for composing a complex application from discrete part is to create a top-level umbrella chart that exposes the global configuration, and then use the charts/ subdir to embed each of the components.</p>
+<p>But sometimes, it is a little bit confusing on how to overwrite a child’s config from uber global values.yaml.</p>
+<p>Like for ckey chart, cmdb is enabled by default from cmdb.enabled to true in parent’s values.yaml, but when I create the uber chart in which ckey is child, giving ckey.cmdb.enabled to false would not help me to disable cmdb in ckey. Rather, cmdb would be created anyway, giving a confliction with cmdb which is a real child from the parent(secrets creation).</p>
+<p>Need to verify sth. tomorrow….GOD  </p>
 
       
     </div>
