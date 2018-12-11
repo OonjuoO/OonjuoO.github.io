@@ -234,7 +234,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/09/test/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="OonjuoO">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -302,6 +302,12 @@
 <p>But sometimes, it is a little bit confusing on how to overwrite a child’s config from uber global values.yaml.</p>
 <p>Like for ckey chart, cmdb is enabled by default from cmdb.enabled to true in parent’s values.yaml, but when I create the uber chart in which ckey is child, giving ckey.cmdb.enabled to false would not help me to disable cmdb in ckey. Rather, cmdb would be created anyway, giving a confliction with cmdb which is a real child from the parent(secrets creation).</p>
 <p>Need to verify sth. tomorrow….GOD  </p>
+<p>Mount secret into env value/into dir</p>
+<ol>
+<li>secret.yaml (secret creation)<br>mount giving the secret name(could be found in ckey chart)</li>
+<li>secret.yaml<br>mount into dir (could be found in sef)</li>
+</ol>
+<p>Mount from configmap, usually used for scripts(could also be found in sef)</p>
 
       
     </div>
@@ -410,7 +416,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-author-name" itemprop="name">OonjuoO</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -491,7 +497,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">OonjuoO</span>
 
   
 
