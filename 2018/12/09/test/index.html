@@ -296,19 +296,50 @@
       
 
       
-        <h3 id="Umbrella-Helm-Chart"><a href="#Umbrella-Helm-Chart" class="headerlink" title="Umbrella Helm Chart"></a>Umbrella Helm Chart</h3><p>在Uber chart中, values的覆盖</p>
+        <h2 id="Umbrella-Helm-Chart"><a href="#Umbrella-Helm-Chart" class="headerlink" title="Umbrella Helm Chart"></a>Umbrella Helm Chart</h2><p>在Uber chart中, values的覆盖</p>
 <p>Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances of large-scale applications. In such cases, a single umbrella chart may have multiple subcharts, each of which functions as piece of the whole.</p>
 <p>The current best practice for composing a complex application from discrete part is to create a top-level umbrella chart that exposes the global configuration, and then use the charts/ subdir to embed each of the components.</p>
 <p>But sometimes, it is a little bit confusing on how to overwrite a child’s config from uber global values.yaml.</p>
 <p>Like for ckey chart, cmdb is enabled by default from cmdb.enabled to true in parent’s values.yaml, but when I create the uber chart in which ckey is child, giving ckey.cmdb.enabled to false would not help me to disable cmdb in ckey. Rather, cmdb would be created anyway, giving a confliction with cmdb which is a real child from the parent(secrets creation).</p>
 <p>Need to verify sth. tomorrow….GOD  </p>
-<p>Mount secret into env value/into dir</p>
-<ol>
-<li>secret.yaml (secret creation)<br>mount giving the secret name(could be found in ckey chart)</li>
-<li>secret.yaml<br>mount into dir (could be found in sef)</li>
+<h3 id="Mount-secret-into-env-value-into-dir"><a href="#Mount-secret-into-env-value-into-dir" class="headerlink" title="Mount secret into env value/into dir"></a>Mount secret into env value/into dir</h3><ol>
+<li>secret.yaml (secret creation)</li>
 </ol>
-<p>Mount from configmap, usually used for scripts(could also be found in sef)</p>
-
+<hr>
+<p>apiVersion: v1<br>kind: Secret<br>metadata:<br>  name: ckey<br>type: Opaque<br>data:<br>  tls.crt: crt | b64enc | quote<br>  tls.key: key | b64enc | quote </p>
+<h2 id="mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir"><a href="#mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir" class="headerlink" title="   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)"></a>   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)</h2><pre><code>    volumeMounts:
+      - name: server-certificates
+        mountPath: /opt/etc/keycloak/server_ssl_certificates
+        readOnly: true
+volumes:
+  - name: server-certificates
+    secret:
+      secretName: tlsSecretName
+</code></pre><ol start="2">
+<li>secret.yaml<br>Mounting to a env variable<br>containers:<ul>
+<li>name: envars-test-container<br>image: nginx<br>env:<ul>
+<li>name: SECRET_USERNAME<br>valueFrom:<br> secretKeyRef:<br>   name: secret name as reference<br>   key: tls.crt</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Mount-from-configmap-usually-used-for-scripts"><a href="#Mount-from-configmap-usually-used-for-scripts" class="headerlink" title="Mount from configmap, usually used for scripts"></a>Mount from configmap, usually used for scripts</h3><hr>
+<p>apiVersion: v1<br>kind: ConfigMap<br>metadata:<br>  name: create-db-users<br>data:</p>
+<ul>
+<li>(.Files.Glob “scripts/*”).AsConfig | nindent 2  # acess files from scripes fir inside template, File</li>
+</ul>
+<p>Afterwards, content of configmap could be mounted in job/deploy/sts/etc</p>
+<hr>
+<p>apiVersion: batch/v1<br>kind: Job<br>metadata:<br>  name: sql<br>spec:<br>  template:<br>    spec:<br>      volumes:</p>
+<pre><code>- name: dbscripts
+  configMap:
+    name: create-db-users
+containers:
+  volumeMounts:
+  - name: dbscripts
+    mountPath: /scripts/
+</code></pre>
       
     </div>
     
@@ -473,7 +504,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Umbrella-Helm-Chart"><span class="nav-number">1.</span> <span class="nav-text">Umbrella Helm Chart</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Umbrella-Helm-Chart"><span class="nav-number">1.</span> <span class="nav-text">Umbrella Helm Chart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mount-secret-into-env-value-into-dir"><span class="nav-number">1.1.</span> <span class="nav-text">Mount secret into env value/into dir</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir"><span class="nav-number">2.</span> <span class="nav-text">   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mount-from-configmap-usually-used-for-scripts"><span class="nav-number">2.1.</span> <span class="nav-text">Mount from configmap, usually used for scripts</span></a></li></ol></li></ol></div>
             
 
           </div>
