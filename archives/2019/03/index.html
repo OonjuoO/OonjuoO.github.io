@@ -125,7 +125,7 @@
 
 
 
-  <title>Uber Chart | Hexo</title>
+  <title>Archive | Hexo</title>
   
 
 
@@ -144,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-archive">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -218,191 +218,72 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
 
-  
+      <span class="archive-page-counter">
+        
+        
+        
+          
+        
+        Um..! 4 posts in total. Keep on posting.
+      </span>
 
-  
-  
-  
+      
+
+        
+        
+        
+
+        
+          
+          <div class="collection-title">
+            <h1 class="archive-year" id="archive-year-2019">2019</h1>
+          </div>
+        
+        
+
+        
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/09/test/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="OonjuoO">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">Uber Chart</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2019/03/08/Louvre/" itemprop="url">
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span itemprop="name">Louvre</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-09T21:13:12+01:00">2018-12-09</time>
-            
+            </a>
+        
+      </h2>
 
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-03-08T11:01:33+01:00" content="2019-03-08">
+          03-08
+        </time>
+      </div>
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="Umbrella-Helm-Chart"><a href="#Umbrella-Helm-Chart" class="headerlink" title="Umbrella Helm Chart"></a>Umbrella Helm Chart</h2><p>在Uber chart中, values的覆盖</p>
-<p>Many of the charts in the official charts repository are building blocks for creating more advanced applications. But charts may be used to create instances of large-scale applications. In such cases, a single umbrella chart may have multiple subcharts, each of which functions as piece of the whole.</p>
-<p>The current best practice for composing a complex application from discrete part is to create a top-level umbrella chart that exposes the global configuration, and then use the charts/ subdir to embed each of the components.</p>
-<p>But sometimes, it is a little bit confusing on how to overwrite a child’s config from uber global values.yaml.</p>
-<p>Like for ckey chart, cmdb is enabled by default from cmdb.enabled to true in parent’s values.yaml, but when I create the uber chart in which ckey is child, giving ckey.cmdb.enabled to false would not help me to disable cmdb in ckey. Rather, cmdb would be created anyway, giving a confliction with cmdb which is a real child from the parent(secrets creation).</p>
-<p>Need to verify sth. tomorrow….GOD  </p>
-<h3 id="Mount-secret-into-env-value-into-dir"><a href="#Mount-secret-into-env-value-into-dir" class="headerlink" title="Mount secret into env value/into dir"></a>Mount secret into env value/into dir</h3><ol>
-<li>secret.yaml (secret creation)</li>
-</ol>
-<hr>
-<p>apiVersion: v1<br>kind: Secret<br>metadata:<br>  name: ckey<br>type: Opaque<br>data:<br>  tls.crt: crt | b64enc | quote<br>  tls.key: key | b64enc | quote </p>
-<h2 id="mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir"><a href="#mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir" class="headerlink" title="   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)"></a>   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)</h2><pre><code>    volumeMounts:
-      - name: server-certificates
-        mountPath: /opt/etc/keycloak/server_ssl_certificates
-        readOnly: true
-volumes:
-  - name: server-certificates
-    secret:
-      secretName: tlsSecretName
-</code></pre><ol start="2">
-<li>secret.yaml<br>Mounting to a env variable<br>containers:<ul>
-<li>name: envars-test-container<br>image: nginx<br>env:<ul>
-<li>name: SECRET_USERNAME<br>valueFrom:<br> secretKeyRef:<br>   name: secret name as reference<br>   key: tls.crt</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="Mount-from-configmap-usually-used-for-scripts"><a href="#Mount-from-configmap-usually-used-for-scripts" class="headerlink" title="Mount from configmap, usually used for scripts"></a>Mount from configmap, usually used for scripts</h3><hr>
-<p>apiVersion: v1<br>kind: ConfigMap<br>metadata:<br>  name: create-db-users<br>data:</p>
-<ul>
-<li>(.Files.Glob “scripts/*”).AsConfig | nindent 2  # acess files from scripes fir inside template, File</li>
-</ul>
-<p>Afterwards, content of configmap could be mounted in job/deploy/sts/etc</p>
-<hr>
-<p>apiVersion: batch/v1<br>kind: Job<br>metadata:<br>  name: sql<br>spec:<br>  template:<br>    spec:<br>      volumes:</p>
-<pre><code>- name: dbscripts
-  configMap:
-    name: create-db-users
-containers:
-  volumeMounts:
-  - name: dbscripts
-    mountPath: /scripts/
-</code></pre>
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Helm/" rel="tag"># Helm</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/12/04/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/09/Some-commands-from-Vim-and-linux/" rel="prev" title="Some commands from Vim and linux">
-                Some commands from Vim and linux <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
       
+
     </div>
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -410,10 +291,6 @@ containers:
 
 
           
-
-  
-
-
 
         </div>
         
@@ -434,17 +311,8 @@ containers:
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -495,22 +363,6 @@ containers:
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Umbrella-Helm-Chart"><span class="nav-number">1.</span> <span class="nav-text">Umbrella Helm Chart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mount-secret-into-env-value-into-dir"><span class="nav-number">1.1.</span> <span class="nav-text">Mount secret into env value/into dir</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mount-giving-the-secret-name-The-secret-tls-crt-and-tls-key-are-mounted-into-a-dir"><span class="nav-number">2.</span> <span class="nav-text">   mount giving the secret name(The secret tls.crt and tls.key are mounted into a dir)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mount-from-configmap-usually-used-for-scripts"><span class="nav-number">2.1.</span> <span class="nav-text">Mount from configmap, usually used for scripts</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -633,10 +485,6 @@ containers:
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
-
-
 
   
 
